@@ -5,8 +5,15 @@
 <p>The connection remains open as long as the loop completes, so try to execute the query before getting into the loop</p>
 
 ## Parameterize your Queries
+<img src='./images/parameters.jpg' />
  Hard coded string will not be passed as parameters in the query sent to the database. So create variables and pass them
 to the predicate.
+This will generate a sql as follows
+
+`Select Top 1 * from Authors where FirstName = 'Anish' `
+#### Find will translate to select TOP(1)
+
+</br>
 <ul>
 
 <li> Find will translate to select TOP(1) </li>
