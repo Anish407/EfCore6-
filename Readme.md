@@ -16,7 +16,6 @@ This will generate a sql as follows
 </br>
 <ul>
 
-<li> Find will translate to select TOP(1) </li>
 <li> If we have multiple orderby's then LINQ qill ignore all but the last one so use ThenBy if we need multiple orderby's </li>
 <li> DBContext.Add/Update will set the entity state to added or modified and then the context will persist these changes when
 savechanges is called. In case of disconnected scenarios we need to explicity use these commands to set the entity state. </li>
