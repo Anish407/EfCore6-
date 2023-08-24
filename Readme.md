@@ -1,8 +1,14 @@
 ﻿<h1>Points to remember</h1>
 
+## Looping Considerations
+<img src='./images/loop.jpg'/>
+<p>The connection remains open as long as the loop completes, so try to execute the query before getting into the loop</p>
+
+## Parameterize your Queries
+ Hard coded string will not be passed as parameters in the query sent to the database. So create variables and pass them
+to the predicate.
 <ul>
-<li> Hard coded string will not be passed as parameters in the query sent to the database. So create variables and pass them
-to the predicate.</li>
+
 <li> Find will translate to select TOP(1) </li>
 <li> If we have multiple orderby's then LINQ qill ignore all but the last one so use ThenBy if we need multiple orderby's </li>
 <li> DBContext.Add/Update will set the entity state to added or modified and then the context will persist these changes when
