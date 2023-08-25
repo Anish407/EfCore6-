@@ -28,6 +28,8 @@ When we call SaveChanges(), EF Core looks at the state of each object and works 
 <i>SaveChanges() after an update will return the number of rows that were affected</i>
 <p>DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code</p>
 <img src='./images/detect changes.jpg' />
+After Calling DetectChanges the EntityState will be updated.
+<img src='./images/detectchanges2.jpg' />
 
 </br>
 </br>
