@@ -13,6 +13,18 @@ This will generate a sql as follows
 `Select Top 1 * from Authors where FirstName = 'Anish' `
 #### Find will translate to select TOP(1)
 
+## DBContext Facts
+<p>The DBContext represents a session with the database and the session starts when we interact with the database and not when we create the DBContext.</p>
+The DBContext tracks the state of an enitity using the below states
+<ul>
+ <li>Unchanged</li>
+  <li>Added</li>
+  <li>Modified</li>
+  <li>Deleted</li>
+</ul>
+When we call SaveChanges(), EF Core looks at the state of each object and works with the provider to determine what time of operation needs to be executed on the database. Once SaveChanges() is executed, it resets the state of all the objects to unchanged. So if we call SaveChanges() again, nothing would change as the object that was acted upon has its state set to unchanged.
+
+</br>
 </br>
 <ul>
 
