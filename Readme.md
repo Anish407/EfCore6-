@@ -26,6 +26,9 @@ The DBContext tracks the state of an enitity using the below states
 When we call SaveChanges(), EF Core looks at the state of each object and works with the provider to determine what time of operation needs to be executed on the database. Once SaveChanges() is executed, it resets the state of all the objects to unchanged. So if we call SaveChanges() again, nothing would change as the object that was acted upon has its state set to unchanged.
 
 <i>SaveChanges() after an update will return the number of rows that were affected</i>
+<p>DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code</p>
+<img src='./images/detect changes.jpg' />
+
 </br>
 </br>
 <ul>
