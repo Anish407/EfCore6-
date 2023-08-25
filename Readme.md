@@ -25,10 +25,11 @@ The DBContext tracks the state of an enitity using the below states
 <img src='./images/change2.jpg' />
 When we call SaveChanges(), EF Core looks at the state of each object and works with the provider to determine what time of operation needs to be executed on the database. Once SaveChanges() is executed, it resets the state of all the objects to unchanged. So if we call SaveChanges() again, nothing would change as the object that was acted upon has its state set to unchanged.
 
+<i>SaveChanges() after an update will return the number of rows that were affected</i>
 </br>
 </br>
 <ul>
-
+<li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
 <li> If we have multiple orderby's then LINQ qill ignore all but the last one so use ThenBy if we need multiple orderby's </li>
 <li> DBContext.Add/Update will set the entity state to added or modified and then the context will persist these changes when
 savechanges is called. In case of disconnected scenarios we need to explicity use these commands to set the entity state. </li>
