@@ -13,6 +13,10 @@ This will generate a sql as follows
 `Select Top 1 * from Authors where FirstName = 'Anish' `
 #### Find will translate to select TOP(1)
 
+## Updating Untracked objects
+<img src='./images/untracked.jpg' />
+<p> In the above scenario, since the object is retrieved using a different DbContext instance, SaveChanges() doesnt know which property has exactly changed. So when we call Context.Update before SaveChanges(), the change tracker will set the state of all the properties as Modified, thus the Sql query will update all the properties on that object even if we change just one of its properties.  </p>
+
 ## DBContext Facts
 <p>The DBContext represents a session with the database and the session starts when we interact with the database and not when we create the DBContext.</p>
 The DBContext tracks the state of an enitity using the below states
@@ -32,7 +36,7 @@ After Calling DetectChanges the EntityState will be updated.
 <img src='./images/detectchanges2.jpg' />
 
 </br>
-</br>
+
 <ul>
 <li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
 <li> If we have multiple orderby's then LINQ qill ignore all but the last one so use ThenBy if we need multiple orderby's </li>
