@@ -20,6 +20,9 @@ This will generate a sql as follows
  If the object is being tracked by the Context, then its not needed to call Context.Update as the Context will internally call DetectChanges and update the EntityState before saving to the database. But if the object is untracked then its better to call the Add/Update/Remove methods on the context to let it know about the operation.
 </p>
 
+## AddRange Methods 
+<p>If we send more than 3 records in the AddRange method then the objects are saved in a batch to the database (MERGE in sql). Since its faster to send a batch compared to executing several insert/update commands for each object.  </p>
+
 ## DBContext Facts
 <p>The DBContext represents a session with the database and the session starts when we interact with the database and not when we create the DBContext.</p>
 The DBContext tracks the state of an enitity using the below states
@@ -37,9 +40,7 @@ When we call SaveChanges(), EF Core looks at the state of each object and works 
 <img src='./images/detect changes.jpg' />
 After Calling DetectChanges the EntityState will be updated.
 <img src='./images/detectchanges2.jpg' />
-## AddRange Methods 
-<p>If we send more than 3 records in the AddRange method then the objects are saved in a batch to the database (MERGE in sql). Since its faster to send a batch compared to executing several insert/update commands for each object.  </p>
-</br>
+
 
 <ul>
 <li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
