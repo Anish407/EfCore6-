@@ -16,6 +16,9 @@ This will generate a sql as follows
 ## Updating Untracked objects
 <img src='./images/untracked.jpg' />
 <p> In the above scenario, since the object is retrieved using a different DbContext instance, SaveChanges() doesnt know which property has exactly changed. So when we call Context.Update before SaveChanges(), the change tracker will set the state of all the properties as Modified, thus the Sql query will update all the properties on that object even if we change just one of its properties.  </p>
+<p>
+ If the object is being tracked by the Context, then its not needed to call Context.Update as the Context will internally call DetectChanges and update the EntityState before saving to the database. But if the object is untracked then its better to call the Add/Update/Remove methods on the context to let it know about the operation.
+</p>
 
 ## DBContext Facts
 <p>The DBContext represents a session with the database and the session starts when we interact with the database and not when we create the DBContext.</p>
@@ -34,7 +37,8 @@ When we call SaveChanges(), EF Core looks at the state of each object and works 
 <img src='./images/detect changes.jpg' />
 After Calling DetectChanges the EntityState will be updated.
 <img src='./images/detectchanges2.jpg' />
-
+## AddRange Methods 
+<p>If we send more than 3 records in the AddRange method then the objects are saved in a batch to the database (MERGE in sql). Since its faster to send a batch compared to executing several insert/update commands for each object.  </p>
 </br>
 
 <ul>
