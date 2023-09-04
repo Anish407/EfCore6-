@@ -41,6 +41,10 @@ When we call SaveChanges(), EF Core looks at the state of each object and works 
 After Calling DetectChanges the EntityState will be updated.
 <img src='./images/detectchanges2.jpg' />
 
+## Relations
+If we need to save a book without an author (parent table), we can make the foriegn key property nullable
+<img src='./images/nullable.jpg' />
+
 
 <ul>
 <li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
