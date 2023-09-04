@@ -45,6 +45,8 @@ After Calling DetectChanges the EntityState will be updated.
 If we need to save a book without an author (parent table), we can make the foriegn key property nullable
 <img src='./images/nullable.jpg' />
 
+## Log the Generated Queries
+<img src='./images/log.jpg' />
 
 <ul>
 <li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
