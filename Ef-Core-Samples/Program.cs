@@ -23,10 +23,39 @@ await EnsureDatabaseCreated(dbContextOptions);
 
 
 //Console.ReadLine();
+await UpdateAuthor();
 
-await AddAuthors();
+async Task UpdateRelatedData()
+{
+    try
+    {
+        using (var context = new PubContext(dbContextOptions.Options))
+        {
+            var authors = await context.Authors.Include(i=> i.Books).FirstOrDefaultAsync(i => i.Id == 1);
 
-await GetAuthors();
+            authors!.Books.Add(new Book
+            {
+                BasePrice = 50,
+                PublishDate = DateTime.Now,
+                Title = "Title",
+            });
+
+            // this should not be called as the author object is tracked by the 
+            // context and it wud generate an insert query on the author that already 
+            // exists in the database.
+            // context.Authors.Add(authors);
+             context.SaveChanges();
+        }
+    }
+    catch (Exception ex)
+    {
+        await Console.Out.WriteLineAsync($"{ex.Message}"); ;
+    }
+}
+
+//await AddAuthors();
+
+//await GetAuthors();
 
 async Task GetAuthors()
 {
