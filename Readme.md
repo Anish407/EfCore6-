@@ -45,6 +45,23 @@ After Calling DetectChanges the EntityState will be updated.
 If we need to save a book without an author (parent table), we can make the foriegn key property nullable
 <img src='./images/nullable.jpg' />
 
+<img src='./images/include.jpg' />
+<p>How to use include to query navigation properties</p>
+
+## Disconnected Updates
+Here we try to query and update a record using different dbcontext instances.
+<img src='./images/updateDisconnected.jpg' />
+<p>In the above scenario, if we call update on the context then we set the state of all its data to modified and the generated sql will update all the rows.</p>
+<img src='./images/updateDisconnected2.jpg' />
+
+If we set the state property on the object using Entry method on the context
+`context2.Entry(authors.Books[0]).State= EntityState.Modified; `
+Then only that specific books gets updated or gets its status set to modified. 
+
+`context2.Entry(authors).State= EntityState.Modified; `
+<p> If we set the Entiry as the author, then the generated sql will try to update the authors object and not the books in it </p>
+
+
 ## Log the Generated Queries
 <img src='./images/log.jpg' />
 
