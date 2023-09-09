@@ -45,6 +45,9 @@ After Calling DetectChanges the EntityState will be updated.
 If we need to save a book without an author (parent table), we can make the foriegn key property nullable
 <img src='./images/nullable.jpg' />
 
+<img src='./images/nullable.jpg' />
+<p>How to use include to query navigation properties</p>
+
 ## Log the Generated Queries
 <img src='./images/log.jpg' />
 
