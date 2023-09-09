@@ -22,7 +22,8 @@ DbContextOptionsBuilder<PubContext> dbContextOptions = new DbContextOptionsBuild
 //var operators = new Operators();
 //await operators.RunSamples(dbContextOptions);
 
-await EagerLoadWithRelatedData();
+await ModifyRelatedData();
+//await EagerLoadWithRelatedData();
 //Console.ReadLine();
 //await UpdateAuthor();
 
@@ -73,6 +74,33 @@ async Task EagerLoadWithRelatedData()
             .AsEnumerable()
             .Where(i=> i.Id==2).ToList();
 
+    }
+}
+
+async Task ModifyRelatedData(){
+    Author authors = new Author();
+    using (var context = new PubContext(dbContextOptions.Options))
+    {
+        authors =  context.Authors.Include(i => i.Books).FirstOrDefault();
+        authors.Books.FirstOrDefault().Title = "Anish88";
+    }
+
+    using (var context2 = new PubContext(dbContextOptions.Options))
+    {
+        // update will set the state of all the books for the author to modified.
+        //context2.Update(authors);
+
+
+        // this will generate a query to update the books where authorid = passed value
+        context2.Entry(authors.Books[0]).State= EntityState.Modified;
+
+
+        // this will generate a sql query that will update the authors
+        // so the books table will not be update 
+        context2.Entry(authors).State = EntityState.Modified;
+       
+        var view =context2.ChangeTracker.DebugView.ShortView;
+        context2.SaveChanges();
     }
 }
 
