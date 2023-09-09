@@ -1,4 +1,5 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using Ef_Core_Samples;
 using EFCore6.Core.Entities;
 using EFCore6.Infra;
 using Microsoft.EntityFrameworkCore;
@@ -7,9 +8,22 @@ Console.WriteLine("Hello, World!");
 
 
 DbContextOptionsBuilder<PubContext> dbContextOptions = new DbContextOptionsBuilder<PubContext>()
-    .UseSqlServer("Server=LAPTOP-FSA8LOOJ\\SQLEXPRESS;Database=PubDatabase;Trusted_Connection=True;TrustServerCertificate=Yes");
+    .UseSqlServer("Server=LAPTOP-FSA8LOOJ\\SQLEXPRESS;Database=PubDatabase;Trusted_Connection=True;TrustServerCertificate=Yes")
+    .LogTo(Console.WriteLine, new string[] 
+    { 
+        // add filter to restrict the data that is being logged.
+        DbLoggerCategory.Database.Command.Name,
+        DbLoggerCategory.Query.Name
+    });
 
 await EnsureDatabaseCreated(dbContextOptions);
+
+//var operators = new Operators();
+//await operators.RunSamples(dbContextOptions);
+
+
+//Console.ReadLine();
+
 await AddAuthors();
 
 await GetAuthors();
