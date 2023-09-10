@@ -25,6 +25,18 @@ namespace EFCore6.Infra
         public DbSet<Book> Books  { get; set; }
         public DbSet<Cover> Covers  { get; set; }
         public DbSet<Artist> Artists  { get; set; }
+        public DbSet<ArtistCover> ArtistCovers  { get; set; }
         public IConfiguration Configuration { get; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Artist>()
+                .HasMany(i => i.Covers)
+                .WithMany(i => i.Artists)
+                .UsingEntity<ArtistCover>();
+            modelBuilder.Entity<ArtistCover>()
+                .ToTable("ArtistCover")
+                .HasKey(i => new { i.ArtistsArtistId, i.CoversCoverId });
+        }
     }
 }
