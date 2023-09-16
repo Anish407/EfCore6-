@@ -9,10 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ManyToManyProgram.cs" />
     <Compile Remove="Program.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="ManyToManyProgram.cs" />
     <None Include="Program.cs" />
   </ItemGroup>
 
