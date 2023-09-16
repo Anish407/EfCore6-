@@ -32,15 +32,11 @@ async Task CheckTransactionWorking(bool throwError = false)
             if (throwError) throw new Exception();
 
             transaction.Commit(); // this is where the changes are made to the database
+            // if this statement is not issued then Ef core will rollback the entire transaction
         }
         catch (Exception ex)
         {
             await Console.Out.WriteLineAsync("Exception thrown"); ;
         }
-        // when we retrieve the artist, we find that each cover has a list of artists in it 
-        // and each artist has again a nested list of covers. That doesn't mean that it has a nested 
-        // collection of objects, all these nested object just point to the same memory location and no
-        // new memory is allocated for these nested objects.
-        var artist = context.Artists.Include(i => i.Covers).FirstOrDefault();
     }
 }

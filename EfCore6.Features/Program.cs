@@ -10,7 +10,15 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
-builder.Services.AddDbContextPool<PubContext>(op => op.UseSqlServer(configuration.GetConnectionString("PubContext")));
+builder.Services.AddDbContextPool<PubContext>
+    (op => op.UseSqlServer(configuration.GetConnectionString("PubContext"), op =>
+    // this causes the DbContext to retry an operation if the connection gets dropped while executing a query
+    // Ef core will act based on the code returned by the database and will try to 
+    // retry a certain number of times based on the response code from the database.
+    op.EnableRetryOnFailure() 
+    ));
+
+
 builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAuthorService, AuthorService>();
