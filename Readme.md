@@ -71,6 +71,49 @@ Then only that specific books gets updated or gets its status set to modified.
 <p>In the above scenario, the author object is tracked by the context. So if we try to add it to the Context then an insert query will be generated, which will fail since the entity already
 exists in the database. So be careful when dealing with tracked objects. We can make such silly mistakes.</p>
 
+## Transaction Handling
+<img src='./images/transactions.jpg' />
+
+Even if we call SaveChanges() inside a transaction, the database will only be updated when the transaction is committed.
+
+## Connection Pooling
+<p>A DbContext is generally a light object: creating and disposing one doesn't involve a database operation, and most applications can do so without any noticeable impact on performance. However, each context instance does set up various internal services and objects necessary for performing its duties, and the overhead of continuously doing so may be significant in high-performance scenarios. For these cases, EF Core can pool your context instances: when you dispose your context, EF Core resets its state and stores it in an internal pool; when a new instance is next requested, that pooled instance is returned instead of setting up a new one. Context pooling allows you to pay context setup costs only once at program startup, rather than continuously.</p>
+Connection pooling is upto the provider that is used by EF core, but there is a way to reuse the DBContext instances using the AddDbContextPool(). 
+
+`builder.Services.AddDbContextPool<PubContext>
+    (op => op.UseSqlServer(configuration.GetConnectionString("ConnectionStringKeyName")));`
+
+So whenever an instance is needed, Ef core will check the pool before creating a new instance of the DbContext.
+
+<a href='https://learn.microsoft.com/en-us/ef/core/performance/advanced-performance-topics?tabs=with-di%2Cexpression-api-with-constant'>Read more about connection pooling</a>
+## Query caching and parameterization
+<img src='https://github.com/Anish407/EfCore6-/assets/51234038/0dd82a95-46a7-48a4-9cb2-0b759875b26a'/>
+
+## Compiled queries
+<p>When EF receives a LINQ query tree for execution, it must first "compile" that tree, e.g. produce SQL from it. Because this task is a heavy process, EF caches queries by the query tree shape, so that queries with the same structure reuse internally-cached compilation outputs. This caching ensures that executing the same LINQ query multiple times is very fast, even if parameter values differ.
+
+However, EF must still perform certain tasks before it can make use of the internal query cache. For example, your query's expression tree must be recursively compared with the expression trees of cached queries, to find the correct cached query. The overhead for this initial processing is negligible in the majority of EF applications, especially when compared to other costs associated with query execution (network I/O, actual query processing and disk I/O at the database...). However, in certain high-performance scenarios it may be desirable to eliminate it.</p>
+
+```
+
+public class AppDbContext : DbContext
+{
+    public DbSet<Product> Products { get; set; }
+
+    // Compiled query definition
+    private static readonly Func<AppDbContext, string, IQueryable<Product>> GetProductsByCategoryQuery = 
+        EF.CompileQuery((AppDbContext context, string category) => 
+            context.Products.Where(p => p.Category == category));
+
+    // Usage of compiled query
+    public IQueryable<Product> GetProductsByCategory(string category)
+    {
+        return GetProductsByCategoryQuery(this, category);
+    }
+}
+
+```
+
 <ul>
 <li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
 <li> If we have multiple orderby's then LINQ qill ignore all but the last one so use ThenBy if we need multiple orderby's </li>
