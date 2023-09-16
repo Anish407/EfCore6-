@@ -114,7 +114,6 @@ public class AppDbContext : DbContext
 
 ```
 
-
 <ul>
 <li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
 <li> If we have multiple orderby's then LINQ qill ignore all but the last one so use ThenBy if we need multiple orderby's </li>
