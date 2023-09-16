@@ -71,6 +71,12 @@ Then only that specific books gets updated or gets its status set to modified.
 <p>In the above scenario, the author object is tracked by the context. So if we try to add it to the Context then an insert query will be generated, which will fail since the entity already
 exists in the database. So be careful when dealing with tracked objects. We can make such silly mistakes.</p>
 
+## Transaction Handling
+<img src='./images/transactions.jpg' />
+
+Even if we call SaveChanges() inside a transaction, the database will only be updated when the transaction is committed.
+
+
 <ul>
 <li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
 <li> If we have multiple orderby's then LINQ qill ignore all but the last one so use ThenBy if we need multiple orderby's </li>
