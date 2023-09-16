@@ -113,7 +113,20 @@ public class AppDbContext : DbContext
 }
 
 ```
+## Setting up the connection string for local testing
 
+```
+ protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+ {
+     // in our app we will pass the connection string , but while testing we can 
+     // check if the context has not been configured then we can 
+     // connect to the local database
+     if (!optionsBuilder.IsConfigured)
+     {
+         optionsBuilder.UseSqlServer("Connection string for the local database");
+     }
+ }
+```
 <ul>
 <li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
 <li> If we have multiple orderby's then LINQ qill ignore all but the last one so use ThenBy if we need multiple orderby's </li>
@@ -126,4 +139,5 @@ set the entity state for us.</li>
 as it will generate an insert statement in sql if we try to update an exisiting entity and add use the add method. </li>
 <li> Where and OrderBy inside the include statement will be added to the sql query sent to the database</li>
 <li> By default delete on cascade is turned on. SO inorder to not delete the related entities just set the foreign key to null</li>
+ <li><a href='https://learn.microsoft.com/en-us/ef/core/testing/choosing-a-testing-strategy'>Testing strategy for apps using EF CORE</a></li>
 </ul>
