@@ -85,6 +85,35 @@ Connection pooling is upto the provider that is used by EF core, but there is a 
 
 So whenever an instance is needed, Ef core will check the pool before creating a new instance of the DbContext.
 
+<a href='https://learn.microsoft.com/en-us/ef/core/performance/advanced-performance-topics?tabs=with-di%2Cexpression-api-with-constant'>Read more about connection pooling</a>
+## Query caching and parameterization
+<img src='https://github.com/Anish407/EfCore6-/assets/51234038/0dd82a95-46a7-48a4-9cb2-0b759875b26a'/>
+
+## Compiled queries
+<p>When EF receives a LINQ query tree for execution, it must first "compile" that tree, e.g. produce SQL from it. Because this task is a heavy process, EF caches queries by the query tree shape, so that queries with the same structure reuse internally-cached compilation outputs. This caching ensures that executing the same LINQ query multiple times is very fast, even if parameter values differ.
+
+However, EF must still perform certain tasks before it can make use of the internal query cache. For example, your query's expression tree must be recursively compared with the expression trees of cached queries, to find the correct cached query. The overhead for this initial processing is negligible in the majority of EF applications, especially when compared to other costs associated with query execution (network I/O, actual query processing and disk I/O at the database...). However, in certain high-performance scenarios it may be desirable to eliminate it.</p>
+
+```
+
+public class AppDbContext : DbContext
+{
+    public DbSet<Product> Products { get; set; }
+
+    // Compiled query definition
+    private static readonly Func<AppDbContext, string, IQueryable<Product>> GetProductsByCategoryQuery = 
+        EF.CompileQuery((AppDbContext context, string category) => 
+            context.Products.Where(p => p.Category == category));
+
+    // Usage of compiled query
+    public IQueryable<Product> GetProductsByCategory(string category)
+    {
+        return GetProductsByCategoryQuery(this, category);
+    }
+}
+
+```
+
 
 <ul>
 <li> DBContext calls DetectChanges() internally from the SaveChanges() to update the EntityState of each object. Its a public method and can be invoked from code </li>
